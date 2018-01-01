@@ -55,6 +55,20 @@ def say_ip():
     aiy.audio.say('My IP address is %s' % ip_address.decode('utf-8'))
 
 
+def custom_command():
+    aiy.audio.say('Hello and, again, welcome to the Aperture Science computer-aided enrichment center.')
+
+
+def start_blinking():
+    aiy.audio.say('Starting')
+    subprocess.call('/home/pi/service_gpio_hack.sh start', shell=True)
+
+
+def stop_blinking():
+    aiy.audio.say('Stopping')
+    subprocess.call('/home/pi/service_gpio_hack.sh stop', shell=True)
+
+
 def process_event(assistant, event):
     status_ui = aiy.voicehat.get_status_ui()
     if event.type == EventType.ON_START_FINISHED:
@@ -77,6 +91,15 @@ def process_event(assistant, event):
         elif text == 'ip address':
             assistant.stop_conversation()
             say_ip()
+        elif text == 'hello Gladys': # When you say GLaDOS, it recognizes Gladys
+            assistant.stop_conversation()
+            custom_command()
+        elif text == 'start blinking':
+            assistant.stop_conversation()
+            start_blinking()
+        elif text == 'stop blinking':
+            assistant.stop_conversation()
+            stop_blinking()
 
     elif event.type == EventType.ON_END_OF_UTTERANCE:
         status_ui.status('thinking')
